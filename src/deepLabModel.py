@@ -3,30 +3,10 @@ print()
 
 import os
 
-# from io import BytesIO
 import tarfile
-
-# import tempfile
-
-
-# print("TensorFlow version:", tf.__version__)
-# print("GPUs disponíveis:", tf.config.list_physical_devices("GPU"))
-
-# from six.moves import urllib  # baixa o arquivo da internet
-
-# Helper libraries
-# import matplotlib
-# from matplotlib import gridspec
-# from matplotlib import pyplot as plt
 import numpy as np
 from PIL import Image
 import cv2 as cv
-
-# from tqdm import tqdm
-# import IPython
-# from sklearn.metrics import confusion_matrix
-# from tabulate import tabulate
-
 
 class DeepLabModel(object):
     """Class to load deeplab model and run inference."""

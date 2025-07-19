@@ -1,8 +1,5 @@
 import matplotlib.pyplot as plt
 
-# from IPython.display import clear_output
-# import matplotlib.gridspec as gridspec
-
 import os
 import numpy as np
 
@@ -125,6 +122,20 @@ LABEL_NAMES = np.asarray(
         "vazio",  # void
     ]
 )
+
+from PIL import Image
+from .model import load_model
+
+
+def segment_image(image, arquitetura="mobilenet"):
+    print(arquitetura)
+    if isinstance(image, np.ndarray):
+        image = Image.fromarray(image)
+
+    MODEL = load_model(arquitetura)
+    seg_map = MODEL.run(image)
+    seg_image = label_to_color_image(seg_map).astype(np.uint8)
+    return seg_image
 
 
 FULL_LABEL_MAP = np.arange(len(LABEL_NAMES)).reshape(len(LABEL_NAMES), 1)
