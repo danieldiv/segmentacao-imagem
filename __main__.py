@@ -1,17 +1,9 @@
 import os
 import time
-
 import cv2
 
-# import IPython
-# import matplotlib.pyplot as plt
-
 from PIL import Image
-from .src import (
-    load_model,
-    vis_segmentation,
-    run_visualization_from_frame,
-)  # run_visualization_video
+from .src import load_model, vis_segmentation, run_visualization_video
 
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,9 +28,6 @@ def run_visualization(SAMPLE_IMAGE, MODEL):
     """Inferences DeepLab model and visualizes result."""
     original_im = Image.open(os.path.join(ROOT_DIR, "images/", SAMPLE_IMAGE))
 
-    # MODEL = load_model("mobilenet")
-    # MODEL = load_model("xception")
-
     inicio = time.time()
     seg_map = MODEL.run(original_im)
     fim = time.time()
@@ -58,8 +47,8 @@ def main():
     # run_visualization(SAMPLE_IMAGE, MODEL)
     # return
 
-    # SAMPLE_VIDEO = os.path.join(ROOT_DIR, "videos/video-rua.mp4")
-    SAMPLE_VIDEO = os.path.join(ROOT_DIR, "videos/video.mp4")
+    SAMPLE_VIDEO = os.path.join(ROOT_DIR, "videos/video-rua.mp4")
+    # SAMPLE_VIDEO = os.path.join(ROOT_DIR, "videos/video.mp4")
 
     cap = cv2.VideoCapture(SAMPLE_VIDEO)
     if not cap.isOpened():
@@ -67,7 +56,7 @@ def main():
         exit()
 
     TOTAL_FRAMES = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    AMOSTRAS = 30
+    AMOSTRAS = 5
     print(TOTAL_FRAMES)
 
     # Calcula os índices dos frames desejados (uniformemente espaçados)
@@ -81,7 +70,7 @@ def main():
             print("Fim do vídeo ou erro na leitura.")
             break
 
-        run_visualization_from_frame(frame, i, MODEL)
+        run_visualization_video(frame, i, MODEL)
         i = i + 1
         if cv2.waitKey(30) & 0xFF == ord("q"):
             break
@@ -92,46 +81,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# import os
-# import time
-# import gradio as gr
-# from functools import partial
-
-# from .src import segment_image
-
-
-# def stop_server():
-#     print("Encerrando o servidor...")
-#     time.sleep(1)
-#     os._exit(0)
-
-
-# def main():
-#     # ARQUITETURA = "mobilenet"
-#     ARQUITETURA = "xception"
-
-#     segment_with_arch = partial(segment_image, arquitetura=ARQUITETURA)
-
-#     with gr.Blocks() as demo:
-#         gr.Markdown("## Segmentação com MobileNet")
-#         gr.Markdown("Envie uma imagem urbana para segmentação:")
-
-#         with gr.Row():
-#             with gr.Column():
-#                 image_input = gr.Image(type="pil", label="Imagem de entrada")
-#                 btn_segment = gr.Button("Segmentar")
-#                 btn_close = gr.Button("Fechar Servidor")
-
-#             image_output = gr.Image(type="pil", label="Segmentação")
-
-#         btn_segment.click(
-#             fn=segment_with_arch, inputs=image_input, outputs=image_output
-#         )
-#         btn_close.click(fn=stop_server, inputs=[], outputs=[])
-
-#     demo.launch()
-
-
-# if __name__ == "__main__":
-#     main()

@@ -148,7 +148,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 resultados_path = os.path.join(ROOT_DIR, "resultados")
 
 
-def run_visualization_from_frame(frame, i, MODEL):
+def run_visualization_video(frame, i, MODEL):
     """Converte frame do OpenCV para PIL e roda visualização."""
     # Converte BGR para RGB, que é o formato esperado pelo PIL
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
