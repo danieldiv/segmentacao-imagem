@@ -1,4 +1,5 @@
 import tensorflow as tf
+
 print()
 
 import os
@@ -6,7 +7,8 @@ import os
 import tarfile
 import numpy as np
 from PIL import Image
-import cv2 as cv
+import cv2
+
 
 class DeepLabModel(object):
     """Class to load deeplab model and run inference."""
@@ -59,6 +61,6 @@ class DeepLabModel(object):
         if len(seg_map.shape) == 2:
             seg_map = np.expand_dims(
                 seg_map, -1
-            )  # need an extra dimension for cv.resize
-        seg_map = cv.resize(seg_map, (width, height), interpolation=cv.INTER_NEAREST)
+            )  # need an extra dimension for cv2.resize
+        seg_map = cv2.resize(seg_map, (width, height), interpolation=cv2.INTER_NEAREST)
         return seg_map

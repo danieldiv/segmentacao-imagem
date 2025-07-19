@@ -87,6 +87,7 @@ def vis_segmentation(image, seg_map, save_path=None, show=False):
     ax2.axis("off")
 
     if save_path:
+        # dirname pega o diretorio pai
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         fig.savefig(save_path, bbox_inches="tight", pad_inches=0)
         print(f"Salvo em: {save_path}")
@@ -124,18 +125,43 @@ LABEL_NAMES = np.asarray(
 )
 
 from PIL import Image
+
+# from io import BytesIO
+# import IPython
+import cv2
+import time
+
 from .model import load_model
 
 
-def segment_image(image, arquitetura="mobilenet"):
-    print(arquitetura)
+def segment_image(image, MODEL):
     if isinstance(image, np.ndarray):
         image = Image.fromarray(image)
 
-    MODEL = load_model(arquitetura)
+    # MODEL = load_model(arquitetura)
     seg_map = MODEL.run(image)
     seg_image = label_to_color_image(seg_map).astype(np.uint8)
     return seg_image
+
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+resultados_path = os.path.join(ROOT_DIR, "resultados")
+
+
+def run_visualization_from_frame(frame, i, MODEL):
+    """Converte frame do OpenCV para PIL e roda visualização."""
+    # Converte BGR para RGB, que é o formato esperado pelo PIL
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    pil_image = Image.fromarray(frame_rgb)
+    start_time = time.time()  # Início da contagem
+
+    seg_map = MODEL.run(pil_image)
+
+    output_path = f"{resultados_path}/frame_{i:04d}.jpg"
+    vis_segmentation(pil_image, seg_map, output_path, False)
+    end_time = time.time()  # Fim da contagem
+    elapsed_time = end_time - start_time
+    print(f"Tempo de segmentação: {elapsed_time:.3f} segundos")
 
 
 FULL_LABEL_MAP = np.arange(len(LABEL_NAMES)).reshape(len(LABEL_NAMES), 1)
